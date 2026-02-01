@@ -49,11 +49,15 @@
 \centering
 \begin{tabularx}{\textwidth}{|L{2.5cm}|X|}
 \hline
-\textbf{Context} & Need to collect metrics from servers; can use push (agents send) or pull (server scrapes) \\
+\textbf{Context} & Need to collect metrics from servers \\
 \hline
-\textbf{Decision} & Use push-based collection where agents POST metrics to API \\
+\textbf{Alternatives} & Pull-based (server scrapes targets like Prometheus) \\
 \hline
-\textbf{Consequences} & + Works through firewalls, no inbound ports needed \newline + Agents control send frequency \newline - Server must handle burst traffic \\
+\textbf{Decision} & Push-based collection where agents POST metrics to API \\
+\hline
+\textbf{Rationale} & Pull requires inbound network access to monitored servers. Push works through firewalls and NAT without opening ports. Agents can batch and retry on failure. \\
+\hline
+\textbf{Consequences} & + Works through firewalls, no inbound ports needed \newline + Agents control send frequency \newline + Easier to add new servers (no central config) \newline - Server must handle burst traffic \\
 \hline
 \end{tabularx}
 \caption{ADR-003: Push-based Metric Collection}
