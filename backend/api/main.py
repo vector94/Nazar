@@ -1,11 +1,11 @@
 from datetime import datetime, timezone, timedelta
 from typing import Optional
-from fastapi import FastAPI, Depends, Query
+from fastapi import FastAPI, Depends, Query, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from shared import get_session, Metric, Alert
-from .schemas import MetricCreate, MetricResponse, AlertResponse
+from .schemas import MetricCreate, MetricResponse, AlertResponse, AlertUpdate
 
 app = FastAPI(
     title="Nazar API",
@@ -75,3 +75,21 @@ async def get_alerts(
 
     result = await session.execute(query)
     return result.scalars().all()
+
+
+@app.patch("/alerts/{alert_id}", response_model=AlertResponse)
+async def update_alert(
+    alert_id: int,
+    update: AlertUpdate,
+    session: AsyncSession = Depends(get_session),
+):
+    result = await session.execute(select(Alert).where(Alert.id == alert_id))
+    alert = result.scalar()
+
+    if not alert:
+        raise HTTPException(status_code=404, detail="Alert not found")
+
+    alert.status = update.status
+    await session.commit()
+    await session.refresh(alert)
+    return alert

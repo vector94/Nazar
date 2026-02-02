@@ -37,3 +37,7 @@ class AlertResponse(BaseModel):
     class Config:
         from_attributes = True
 
+
+class AlertUpdate(BaseModel):
+    status: str
+
