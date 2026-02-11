@@ -26,7 +26,7 @@ A performance monitoring platform that collects system metrics, detects anomalie
                     └───────────┘
 ```
 
-1. **Agents** collect CPU, memory, disk metrics and push to the API every 10 seconds
+1. **Agents** sample system metrics every 1 second and send aggregated data (min/max/avg) every 10 seconds
 2. **API Server** stores metrics in TimescaleDB and publishes to RabbitMQ
 3. **Worker** consumes messages and runs anomaly detection:
    - Threshold-based: alerts when metrics exceed configured limits

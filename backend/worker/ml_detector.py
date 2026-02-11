@@ -26,10 +26,11 @@ class AnomalyDetector:
         self.min_samples = 50  # Minimum samples needed to train
 
     def _extract_features(self, metric: Metric) -> Optional[np.ndarray]:
-        """Extract feature vector from a metric."""
+        """Extract feature vector from a metric. Uses max values when available."""
         values = []
         for name in self.feature_names:
-            val = getattr(metric, name)
+            prefix = name.split("_")[0]  # cpu, memory, disk
+            val = getattr(metric, f"{prefix}_max", None) or getattr(metric, name)
             if val is None:
                 return None  # Skip metrics with missing values
             values.append(val)

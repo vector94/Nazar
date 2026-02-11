@@ -19,7 +19,7 @@ This scenario shows how metrics flow from monitored servers into the system.
 \subsubsection{Interaction Steps}
 
 \begin{enumerate}
-    \item Monitored server pushes metrics to API Server via HTTPS POST
+    \item Agent samples metrics every 1 second and pushes aggregated data (min/max/avg) to API Server via HTTPS POST
     \item API Server stores metrics in TimescaleDB
     \item API Server publishes metrics to RabbitMQ for async processing
     \item API Server returns 202 Accepted to the server
